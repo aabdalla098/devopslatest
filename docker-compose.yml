@@ -1,0 +1,41 @@
+version: "3.1"
+services:
+   
+   php:
+      image: php:7.2-apache
+      volumes:
+         - /app:/var/www/html
+      ports: 
+         - 80:80
+      networks:
+         - frontend 
+         - backend
+   
+   db:
+      image: mysql:latest
+      restart: "always"
+      volumes:
+         - /container/db/storage:/var/lib/mysql
+      environment:
+         - MYSQL_ROOT_PASSWORD="somerootpassword"
+         - MYSQL_DATABASE="dummyDB"
+         - MYSQL_USER="dummyUser"
+         - MYSQL_PASSWORD="dummyUserPassword"
+      ports: 
+         - 3306:3306
+      networks: 
+         - backend
+   
+   redis:
+     image: redis:alpine
+     restart: "always"
+     ports: 
+        - 6379:6379
+     networks:
+         - backend
+   
+networks:  
+   frontend:
+      driver: bridge
+   backend:
+      driver: bridge 
